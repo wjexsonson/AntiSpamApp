@@ -15,6 +15,7 @@ class CallsFragment : Fragment() {
 
     // This property is only valid between onCreateView and
     // onDestroyView.
+
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -23,7 +24,7 @@ class CallsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val callsViewModel =
-            ViewModelProvider(this).get(CallsViewModel::class.java)
+            ViewModelProvider(this)[CallsViewModel::class.java]
 
         _binding = FragmentCallsBinding.inflate(inflater, container, false)
         val root: View = binding.root
