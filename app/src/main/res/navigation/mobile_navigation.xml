@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/navigation_calls">
+    <fragment
+        android:id="@+id/navigation_calls"
+        android:name="com.example.myapplication.ui.calls.CallsFragment"
+        android:label="fragment_calls"
+        tools:layout="@layout/fragment_calls" />
+    <fragment
+        android:id="@+id/navigation_blocks"
+        android:name="com.example.myapplication.ui.blocks.BlocksFragment"
+        android:label="fragment_blocks"
+        tools:layout="@layout/fragment_blocks" />
+    <fragment
+        android:id="@+id/navigation_contacts"
+        android:name="com.example.myapplication.ui.contacts.ContactsFragment"
+        android:label="fragment_contacts"
+        tools:layout="@layout/fragment_contacts" />
+    <fragment
+        android:id="@+id/navigation_sms"
+        android:name="com.example.myapplication.ui.sms.SMSFragment"
+        android:label="fragment_sms"
+        tools:layout="@layout/fragment_sms" />
+    <fragment
+        android:id="@+id/navigation_cards"
+        android:name="com.example.myapplication.ui.cards.CardsFragment"
+        android:label="fragment_cards"
+        tools:layout="@layout/fragment_cards" />
+</navigation>

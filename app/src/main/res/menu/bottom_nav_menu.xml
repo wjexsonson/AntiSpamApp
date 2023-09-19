@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_calls"
+        android:icon="@drawable/baseline_call_24"
+        android:title="@string/title_calls" />
+
+    <item
+        android:id="@+id/navigation_sms"
+        android:icon="@drawable/baseline_3p_24"
+        android:title="@string/title_sms" />
+    <item
+        android:id="@+id/navigation_contacts"
+        android:icon="@drawable/baseline_account_circle_24"
+        android:title="@string/title_contacts" />
+    <item
+        android:id="@+id/navigation_cards"
+        android:icon="@drawable/baseline_credit_card_24"
+        android:title="@string/title_cards" />
+    <item
+        android:id="@+id/navigation_blocks"
+        android:icon="@drawable/baseline_block_24"
+        android:title="@string/title_blocks" />
+</menu>
