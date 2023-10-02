@@ -13,22 +13,20 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.myapplication.R
 import com.example.myapplication.data.repository.UserRepositoryImpl
+import com.example.myapplication.data.storage.sharedprefs.SharedPrefUserStorage
 import com.example.myapplication.databinding.ActivityMainBinding
-import com.example.myapplication.domain.models.SaveUserNameParam
-import com.example.myapplication.domain.models.UserName
-import com.example.myapplication.domain.usecase.GetUserNameUseCase
-import com.example.myapplication.domain.usecase.SaveUserNameUseCase
+
 
 class MainActivity : AppCompatActivity() {
 
     private val userRepository by lazy(LazyThreadSafetyMode.NONE) {
-        UserRepositoryImpl(context = applicationContext)
+        UserRepositoryImpl(userStorage = SharedPrefUserStorage(context = applicationContext))
     }
     private val getUserNameUseCase  by lazy(LazyThreadSafetyMode.NONE){
-        GetUserNameUseCase(userRepository = userRepository)
+        com.example.myapplication.domain.usecase.GetUserNameUseCase(userRepository = userRepository)
     }
     private val saveUserNameUseCase  by lazy(LazyThreadSafetyMode.NONE){
-        SaveUserNameUseCase(userRepository = userRepository)
+        com.example.myapplication.domain.usecase.SaveUserNameUseCase(userRepository = userRepository)
     }
     private lateinit var binding: ActivityMainBinding
 
@@ -46,12 +44,12 @@ class MainActivity : AppCompatActivity() {
 
         sendButton.setOnClickListener{
             val text = dataEditView.text.toString()
-            val params = SaveUserNameParam(name=text)
+            val params = com.example.myapplication.domain.models.SaveUserNameParam(name = text)
             val result: Boolean = saveUserNameUseCase.execute(param=params)
             dataTextView.text = "Save result = $result"
         }
         receiveButton.setOnClickListener {
-            val userName: UserName = getUserNameUseCase.execute()
+            val userName: com.example.myapplication.domain.models.UserName = getUserNameUseCase.execute()
             dataTextView.text = "${userName.firstName} ${userName.lastName}"
         }
         val navView: BottomNavigationView = binding.navView
