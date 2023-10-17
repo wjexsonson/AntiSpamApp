@@ -2,11 +2,12 @@ package com.example.myapplication.presentation
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -15,6 +16,10 @@ import com.example.myapplication.R
 import com.example.myapplication.data.repository.UserRepositoryImpl
 import com.example.myapplication.data.storage.sharedprefs.SharedPrefUserStorage
 import com.example.myapplication.databinding.ActivityMainBinding
+import com.example.myapplication.domain.usecase.GetUserNameUseCase
+import com.example.myapplication.domain.usecase.SaveUserNameUseCase
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class MainActivity : AppCompatActivity() {
@@ -23,39 +28,45 @@ class MainActivity : AppCompatActivity() {
         UserRepositoryImpl(userStorage = SharedPrefUserStorage(context = applicationContext))
     }
     private val getUserNameUseCase  by lazy(LazyThreadSafetyMode.NONE){
-        com.example.myapplication.domain.usecase.GetUserNameUseCase(userRepository = userRepository)
+        GetUserNameUseCase(userRepository = userRepository)
     }
     private val saveUserNameUseCase  by lazy(LazyThreadSafetyMode.NONE){
-        com.example.myapplication.domain.usecase.SaveUserNameUseCase(userRepository = userRepository)
+        SaveUserNameUseCase(userRepository = userRepository)
     }
     private lateinit var binding: ActivityMainBinding
+
+    private val vm: MainViewModel by viewModel<MainViewModel>()
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        Log.e("AAA", "Activity created")
+
+
+
 
         val dataTextView = findViewById<TextView>(R.id.dataTextView)
         val dataEditView = findViewById<EditText>(R.id.dataEditText)
         val sendButton = findViewById<Button>(R.id.sendButton)
         val receiveButton = findViewById<Button>(R.id.receiveButton)
 
+        vm.resultLive.observe(this, Observer {
+            dataTextView.text = it
+        })
+
         sendButton.setOnClickListener{
             val text = dataEditView.text.toString()
-            val params = com.example.myapplication.domain.models.SaveUserNameParam(name = text)
-            val result: Boolean = saveUserNameUseCase.execute(param=params)
-            dataTextView.text = "Save result = $result"
+            vm.save(text)
         }
         receiveButton.setOnClickListener {
-            val userName: com.example.myapplication.domain.models.UserName = getUserNameUseCase.execute()
-            dataTextView.text = "${userName.firstName} ${userName.lastName}"
+            vm.load()
         }
         val navView: BottomNavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+
         val appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.navigation_calls,
